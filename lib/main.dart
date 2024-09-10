@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ricktionary/characters/characters.dart';
 
 void main() {
   runApp(const MainApp());
@@ -9,17 +10,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: ListView.builder(
-          itemCount: 100,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text('Item $index'),
-            );
-          },
-        ),
-      ),
+    return const MaterialApp(
+      home: CharacterPage(),
     );
   }
 }
