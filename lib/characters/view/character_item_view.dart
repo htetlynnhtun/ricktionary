@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:ricktionary/characters/character_model.dart';
+import 'package:ricktionary/characters/domain/character.dart';
 
 class CharacterItemView extends StatelessWidget {
   const CharacterItemView({
@@ -8,7 +8,7 @@ class CharacterItemView extends StatelessWidget {
     required this.character,
   });
 
-  final CharacterModel character;
+  final Character character;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class CharacterItemView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CachedNetworkImage(
-              imageUrl: character.image,
+              imageUrl: character.imageUrl,
               fit: BoxFit.contain,
               width: 150,
               height: 150,
@@ -61,7 +61,7 @@ class CharacterItemView extends StatelessWidget {
   }
 }
 
-extension on CharacterModel {
+extension on Character {
   Color get statusColor {
     switch (status) {
       case 'Alive':
