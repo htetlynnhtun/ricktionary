@@ -1,0 +1,1 @@
+export 'domain/paginated.dart';
