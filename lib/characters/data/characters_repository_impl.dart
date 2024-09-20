@@ -1,5 +1,6 @@
 import 'package:ricktionary/characters/characters.dart';
 import 'package:ricktionary/characters/data/character_dto.dart';
+import 'package:ricktionary/characters/data/characters_cache.dart';
 import 'package:ricktionary/characters/data/characters_gql_service.dart';
 import 'package:ricktionary/core/core.dart';
 
@@ -27,18 +28,5 @@ final class CharactersRepositoryImpl implements CharactersRepository {
     );
     await _charactersCache.upsert(paginated.items);
     return paginated;
-  }
-}
-
-class CharactersCache {
-  final _cache = <Character>[];
-
-  Future<List<Character>> retrieve() async {
-    return _cache;
-  }
-
-  Future<void> upsert(List<Character> characters) async {
-    _cache.clear();
-    _cache.addAll(characters);
   }
 }
