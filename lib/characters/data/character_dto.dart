@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:ricktionary/characters/characters.dart';
 
 class CharacterDto {
-  final String id;
+  final int id;
   final String name;
   final String status;
   final String species;
@@ -29,7 +29,7 @@ class CharacterDto {
 
   factory CharacterDto.fromMap(Map<String, dynamic> map) {
     return CharacterDto(
-      id: map['id'] as String,
+      id: int.parse(map['id']),
       name: map['name'] as String,
       status: map['status'] as String,
       species: map['species'] as String,
@@ -45,7 +45,7 @@ class CharacterDto {
 extension CharacterDtoMapper on CharacterDto {
   Character toDomain() {
     return Character(
-      id: int.parse(id),
+      id: id,
       name: name,
       status: status,
       species: species,
