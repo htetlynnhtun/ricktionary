@@ -29,7 +29,10 @@ class CharacterDto {
 
   factory CharacterDto.fromMap(Map<String, dynamic> map) {
     return CharacterDto(
-      id: int.parse(map['id']),
+      id: switch (map['id']) {
+        int() => map['id'],
+        _ => int.parse(map['id'])
+      },
       name: map['name'] as String,
       status: map['status'] as String,
       species: map['species'] as String,

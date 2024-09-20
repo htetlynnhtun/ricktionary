@@ -10,7 +10,7 @@ class CharacterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => CharactersCubit(
-        CharactersRepositoryImpl(),
+        context.read(),
       )..loadCharacters(),
       child: const CharacterView(),
     );
