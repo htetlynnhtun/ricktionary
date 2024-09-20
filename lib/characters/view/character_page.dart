@@ -63,18 +63,20 @@ class CharactersLoadedView extends StatelessWidget {
         }
         return false;
       },
-      child: ListView.separated(
-        padding: const EdgeInsets.all(16),
-        itemCount: characters.length + (loadMore == null ? 0 : 1),
-        separatorBuilder: (context, index) => const SizedBox(height: 16),
-        itemBuilder: (context, index) {
-          if (index >= characters.length) {
-            return const LoadMoreIndicator();
-          }
-          return CharacterItemView(
-            character: characters[index],
-          );
-        },
+      child: Scrollbar(
+        child: ListView.separated(
+          padding: const EdgeInsets.all(16),
+          itemCount: characters.length + (loadMore == null ? 0 : 1),
+          separatorBuilder: (context, index) => const SizedBox(height: 16),
+          itemBuilder: (context, index) {
+            if (index >= characters.length) {
+              return const LoadMoreIndicator();
+            }
+            return CharacterItemView(
+              character: characters[index],
+            );
+          },
+        ),
       ),
     );
   }
