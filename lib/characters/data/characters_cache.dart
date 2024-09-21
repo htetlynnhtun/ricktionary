@@ -28,16 +28,22 @@ class CharactersCache {
     );
   }
 
-  Future<List<CharacterDto>> retrieve() async {
-    final characterMaps = await database.query(charactersTable);
-    return [
-      for (final map in characterMaps) CharacterDto.fromMap(map),
-    ];
+  Future<List<CharacterDto>> retrieve(int page) async {
+    final characterMaps = await database.query(
+      charactersTable,
+      limit: charactersPerPage,
+      offset: (page - 1) * charactersPerPage,
+    );
+    return characterMaps.map(CharacterDto.fromMap).toList();
   }
 
-  Future<void> upsert(List<CharacterDto> characters) async {
+  Future<void> refresh(int page, List<CharacterDto> characters) async {
+    await _delete(page);
+    _insert(characters);
+  }
+
+  Future<void> _insert(List<CharacterDto> characters) async {
     final batch = database.batch();
-    batch.delete(charactersTable);
     for (final dto in characters) {
       batch.insert(
         charactersTable,
@@ -45,6 +51,18 @@ class CharactersCache {
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     }
+    await batch.commit(noResult: true);
+  }
+
+  Future<void> _delete(int page) async {
+    final offset = (page - 1) * charactersPerPage;
+    final batch = database.batch();
+    batch.delete(
+      charactersTable,
+      where:
+          'id IN (SELECT id FROM $charactersTable LIMIT $charactersPerPage OFFSET ?)',
+      whereArgs: [offset],
+    );
     await batch.commit(noResult: true);
   }
 }

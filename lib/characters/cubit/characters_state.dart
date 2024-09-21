@@ -1,20 +1,28 @@
 part of 'characters_cubit.dart';
 
 @immutable
-sealed class CharactersState {}
+sealed class CharactersState {
+  const CharactersState({
+    this.characters = const [],
+    this.page = 0,
+    this.isLastPage = false,
+  });
+  final List<Character> characters;
+  final int page;
+  final bool isLastPage;
+}
 
 final class CharactersInitial extends CharactersState {}
 
-final class CharactersLoading extends CharactersState {}
-
 final class CharactersLoaded extends CharactersState {
-  final List<Character> characters;
-
-  CharactersLoaded({required this.characters});
+  const CharactersLoaded({
+    required super.characters,
+    required super.page,
+    required super.isLastPage,
+  });
 }
 
 final class CharactersFailure extends CharactersState {
   final String message;
-
-  CharactersFailure(this.message);
+  const CharactersFailure(this.message);
 }

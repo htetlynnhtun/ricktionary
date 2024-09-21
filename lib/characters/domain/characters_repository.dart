@@ -1,14 +1,13 @@
 import 'package:ricktionary/characters/characters.dart';
-import 'package:ricktionary/core/core.dart';
 
 abstract class CharactersRepository {
-  Future<GetCharactersResult> getCharacters();
+  Future<GetCharactersResult> getCharacters(int page);
 }
 
 sealed class GetCharactersResult {}
 
 final class GetCharactersSuccess extends GetCharactersResult {
-  final Paginated<Character> characters;
+  final List<Character> characters;
 
   GetCharactersSuccess(this.characters);
 }

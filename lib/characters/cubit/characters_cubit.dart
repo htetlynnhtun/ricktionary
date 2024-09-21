@@ -1,10 +1,7 @@
-import 'dart:ui';
-
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 import 'package:ricktionary/characters/characters.dart';
-import 'package:ricktionary/core/core.dart';
 
 part 'characters_state.dart';
 
@@ -15,31 +12,28 @@ class CharactersCubit extends Cubit<CharactersState> {
     this.charactersRepository,
   ) : super(CharactersInitial());
 
-  VoidCallback? loadMoreCharacters;
-
   Future<void> loadCharacters() async {
-    emit(CharactersLoading());
+    if (state.isLastPage) return;
 
-    final result = await charactersRepository.getCharacters();
+    final pageToLoad = state.page + 1;
+    final result = await charactersRepository.getCharacters(pageToLoad);
 
     switch (result) {
       case GetCharactersSuccess(:final characters):
-        _handleCharactersLoaded(characters);
+        emit(CharactersLoaded(
+          characters: state.characters + characters,
+          page: pageToLoad,
+          isLastPage:  characters.isEmpty,
+        ));
         break;
       case GetCharactersFailure():
-        loadMoreCharacters = null;
         emit(CharactersFailure(result.message));
         break;
     }
   }
 
-  void _handleCharactersLoaded(Paginated<Character> characters) {
-    emit(CharactersLoaded(characters: characters.items));
-    if (characters.next != null) {
-      loadMoreCharacters = () async {
-        final newCharacters = await characters.next!();
-        _handleCharactersLoaded(newCharacters);
-      };
-    }
+  Future<void> refreshCharacters() async {
+    emit(CharactersInitial());
+    await loadCharacters();
   }
 }
